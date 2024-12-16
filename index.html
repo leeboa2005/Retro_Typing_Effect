@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Nerko+One&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <title>레트로 타이핑 효과 구현하기</title>
+  <style>
+    @font-face {
+      font-family: 'PyeongChangPeace-Bold';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/PyeongChangPeace-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    body {
+      background-color: black;
+      color: #56dfb4;
+      font-family: 'PyeongChangPeace-Bold', sans-serif;
+      font-size: 72px;
+      letter-spacing: 5px;
+      line-height: 1.45;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .console {
+      display: inline-block;
+      white-space: nowrap;
+      text-shadow: 0 0 3px #56dfb4, 0 0 5px #56dfb4, 0 0 10px #00FF00;
+      position: relative;
+    }
+
+    .cursor {
+      display: inline-block;
+      animation: blink 0.8s infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    /* CRT 화면 효과 */
+    body::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0px, rgba(0, 0, 0, 0.9) 1px, transparent 2px, transparent 2px);
+      opacity: 0.2;
+      z-index: 1;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(0, 255, 0, 0.05) 10%, rgba(0, 0, 0, 0.95) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0, 255, 0, 0.05) 2px);
+      animation: scanlines 10s linear infinite;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+
+    /* 스캔 라인 애니메이션 */
+    @keyframes scanlines {
+      0% {
+        background-position: 0 0;
+      }
+
+      100% {
+        background-position: 0 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="console"> <span id="text"></span> <span class="cursor">_</span> </div>
+  <div class="scanlines"></div>
+
+  <script>
+    const textElement = document.getElementById('text'); // 텍스트를 표시할 HTML 요소
+    const texts = ['HELLO WORLD!', 'BOA PORTFOLIO✌️']; // 타이핑할 텍스트들
+    let textIndex = 0; // 현재 타이핑할 텍스트의 인덱스
+    let index = 0; // 현재 텍스트의 문자 위치
+
+    // 타이핑 함수
+    function typeText() {
+      // 현재 텍스트의 모든 글자가 출력되지 않았다면
+      if (index < texts[textIndex].length) {
+        textElement.innerHTML += texts[textIndex][index]; // 한 글자씩 화면에 추가
+        index++; // 인덱스를 하나 증가시켜서 다음 글자 표시
+        setTimeout(typeText, 150); // 150ms 후에 다시 타이핑
+      }
+      // 현재 텍스트가 끝났다면
+      else if (textIndex < texts.length - 1) {
+        textIndex++; // 다음 텍스트로 넘어가기
+        index = 0; // 문자 인덱스를 0으로 초기화
+        setTimeout(() => {
+          textElement.innerHTML += '<br>'; // 줄바꿈
+          typeText(); // 다음 텍스트 타이핑 시작
+        }, 800); // 800ms 후에 다음 텍스트 시작
+      }
+    }
+
+    typeText(); // 처음 타이핑 시작
+  </script>
+</body>
+
+</html>
