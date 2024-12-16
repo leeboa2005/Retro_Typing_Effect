@@ -1,4 +1,4 @@
-![Preview GIF](https://github.com/leeboa2005/Retro_Typing_Effect/blob/main/assets/preview.gif)
+![Preview GIF](https://raw.githubusercontent.com/leeboa2005/Retro_Typing_Effect/main/assets/preview.gif)
 
 # ✨레트로 타이핑 효과 구현하기✨
 
