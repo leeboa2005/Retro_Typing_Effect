@@ -12,6 +12,7 @@
 
   <title>레트로 타이핑 효과 구현하기</title>
   <style>
+    /* 폰트 설정 */
     @font-face {
       font-family: 'PyeongChangPeace-Bold';
       src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/PyeongChangPeace-Bold.woff2') format('woff2');
@@ -19,7 +20,14 @@
       font-style: normal;
     }
 
+    /* 전체 영역 */
     body {
+      background-color: black;
+    }
+
+    section {
+      width: 100%;
+      height: 100vh;
       background-color: black;
       color: #56dfb4;
       font-family: 'PyeongChangPeace-Bold', sans-serif;
@@ -27,13 +35,13 @@
       letter-spacing: 5px;
       line-height: 1.45;
       margin: 0;
-      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: hidden;
     }
 
+    /* 타이핑 영역 */
     .console {
       display: inline-block;
       white-space: nowrap;
@@ -53,7 +61,7 @@
     }
 
     /* CRT 화면 효과 */
-    body::after {
+    section::after {
       content: "";
       position: absolute;
       top: 0;
@@ -66,7 +74,7 @@
       z-index: 1;
     }
 
-    body::before {
+    section::before {
       content: "";
       position: absolute;
       top: 0;
@@ -78,21 +86,19 @@
       z-index: 1;
     }
 
-    .scanlines {
+    .scan_lines {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       background: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0, 255, 0, 0.05) 2px);
-      animation: scanlines 10s linear infinite;
+      animation: lines 10s linear infinite;
       pointer-events: none;
       z-index: 2;
     }
 
-
-    /* 스캔 라인 애니메이션 */
-    @keyframes scanlines {
+    @keyframes lines {
       0% {
         background-position: 0 0;
       }
@@ -105,35 +111,37 @@
 </head>
 
 <body>
-  <div class="console"> <span id="text"></span> <span class="cursor">_</span> </div>
-  <div class="scanlines"></div>
-
+  <section>
+    <div class="console"> <span id="text"></span> <span class="cursor">_</span> </div>
+    <div class="scan_lines"></div>
+  </section>
   <script>
     const textElement = document.getElementById('text'); // 텍스트를 표시할 HTML 요소
     const texts = ['HELLO WORLD!', 'BOA PORTFOLIO✌️']; // 타이핑할 텍스트들
     let textIndex = 0; // 현재 타이핑할 텍스트의 인덱스
-    let index = 0; // 현재 텍스트의 문자 위치
+    let charIndex = 0; // 현재 텍스트의 문자 위치
 
     // 타이핑 함수
-    function typeText() {
+    function startTyping() {
       // 현재 텍스트의 모든 글자가 출력되지 않았다면
-      if (index < texts[textIndex].length) {
-        textElement.innerHTML += texts[textIndex][index]; // 한 글자씩 화면에 추가
-        index++; // 인덱스를 하나 증가시켜서 다음 글자 표시
-        setTimeout(typeText, 150); // 150ms 후에 다시 타이핑
+      if (charIndex < texts[textIndex].length) {
+        textElement.innerHTML += texts[textIndex][charIndex]; // 한 글자씩 화면에 추가
+        charIndex++; // 인덱스를 하나 증가시켜서 다음 글자 표시
+        setTimeout(startTyping, 150); // 150ms 후에 다시 타이핑
       }
       // 현재 텍스트가 끝났다면
       else if (textIndex < texts.length - 1) {
+        console.log(textIndex, texts.length);
         textIndex++; // 다음 텍스트로 넘어가기
-        index = 0; // 문자 인덱스를 0으로 초기화
+        charIndex = 0; // 문자 인덱스를 0으로 초기화
         setTimeout(() => {
           textElement.innerHTML += '<br>'; // 줄바꿈
-          typeText(); // 다음 텍스트 타이핑 시작
+          startTyping(); // 다음 텍스트 타이핑 시작
         }, 800); // 800ms 후에 다음 텍스트 시작
       }
     }
 
-    typeText(); // 처음 타이핑 시작
+    startTyping(); // 처음 타이핑 시작
   </script>
 </body>
 
